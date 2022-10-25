@@ -1,0 +1,9 @@
+
+logging:
+  file:
+    name: logs/iis-manager.log
+  level:
+    root: info
+    org:
+      apache: error
+      springframework: error

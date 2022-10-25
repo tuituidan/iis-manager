@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+    <title>IIS管理</title>
+    <link type="text/css" rel="stylesheet" href="lib/iview/iview.css">
+    <link type="text/css" rel="stylesheet" href="css/index.css">
+</head>
+<body>
+<div v-cloak id="app">
+    <div class="layout">
+        <Layout>
+            <i-header>
+                <div>IIS管理</div>
+            </i-header>
+            <i-content>
+                <i-table border
+                         stripe
+                         :columns="columns"
+                         :data="datas">
+                    <template slot-scope="{ row, index }" slot="action">
+                        <i-button type="success"
+                                  v-if="row.siteState==='Stoped'"
+                                  @click="siteState(row.id, 'start')"
+                                  size="small">启动网站</i-button>
+                        <i-button v-else
+                                  type="error"
+                                  @click="siteState(row.id, 'stop')"
+                                  size="small">停止网站</i-button>
+                        <i-button type="warning"
+                                  @click="siteState(row.id, 'restart')"
+                                  size="small">重启网站</i-button>
+                        <i-button type="success"
+                                  v-if="row.apppoolState==='Stoped'"
+                                  @click="apppoolState(row.id, 'start')"
+                                  size="small">启动应用池</i-button>
+                        <i-button v-else type="error"
+                                  @click="apppoolState(row.id, 'stop')"
+                                  size="small">停止应用池</i-button>
+                        <i-button type="warning"
+                                  @click="apppoolState(row.id, 'recycle')"
+                                  size="small">回收应用池</i-button>
+<!--                        <i-button type="info"  size="small">下载日志</i-button>-->
+                    </template>
+                </i-table>
+            </i-content>
+        </Layout>
+    </div>
+</div>
+<script type="text/javascript" src="lib/vue.min.js"></script>
+<script type="text/javascript" src="lib/iview/iview.min.js"></script>
+<script type="text/javascript" src="lib/axios.min.js"></script>
+<script type="text/javascript" src="js/vue-utils.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+</body>
+</html>
