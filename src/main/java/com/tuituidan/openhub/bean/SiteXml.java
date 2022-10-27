@@ -17,9 +17,6 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class SiteXml {
 
-    @JSONField(name = "SITE.ID")
-    private String id;
-
     @JSONField(name = "SITE.NAME")
     private String siteName;
 

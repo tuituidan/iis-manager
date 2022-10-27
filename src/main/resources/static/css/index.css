@@ -36,3 +36,11 @@ html, body {
 .ivu-layout-content {
     padding: 20px 200px;
 }
+
+.search-panel {
+    width: 40%;
+}
+
+.ivu-table-wrapper{
+    margin-top: 10px;
+}

@@ -15,30 +15,47 @@
                 <div>IIS管理</div>
             </i-header>
             <i-content>
+                <div class="search-panel">
+                    <i-input search
+                             size="large"
+                             placeholder="输入网站名称进行搜索..."
+                             v-model.trim="keywords"
+                             @on-change="searchHandler">
+                    </i-input>
+                </div>
                 <i-table border
                          stripe
                          :columns="columns"
-                         :data="datas">
+                         :data="searchDatas">
+                    <template slot-scope="{ row, index }" slot="site-state">
+                        <Tag color="default" v-if="row.siteState==='Stopped'">已停止</Tag>
+                        <Tag color="success" v-else>已启动</Tag>
+                    </template>
+                    <template slot-scope="{ row, index }" slot="apppool-state">
+                        <Tag color="default" v-if="row.apppoolState==='Stopped'">已停止</Tag>
+                        <Tag color="success" v-else>已启动</Tag>
+                    </template>
                     <template slot-scope="{ row, index }" slot="action">
-                        <i-button type="success"
-                                  v-if="row.siteState==='Stoped'"
+                        <i-button type="text"
+                                  v-if="row.siteState==='Stopped'"
                                   @click="siteState(row.id, 'start')"
                                   size="small">启动网站</i-button>
                         <i-button v-else
-                                  type="error"
+                                  type="text"
                                   @click="siteState(row.id, 'stop')"
                                   size="small">停止网站</i-button>
-                        <i-button type="warning"
+                        <i-button type="text"
                                   @click="siteState(row.id, 'restart')"
                                   size="small">重启网站</i-button>
-                        <i-button type="success"
-                                  v-if="row.apppoolState==='Stoped'"
+                        <i-button type="text"
+                                  v-if="row.apppoolState==='Stopped'"
                                   @click="apppoolState(row.id, 'start')"
                                   size="small">启动应用池</i-button>
-                        <i-button v-else type="error"
+                        <i-button v-else
+                                  type="text"
                                   @click="apppoolState(row.id, 'stop')"
                                   size="small">停止应用池</i-button>
-                        <i-button type="warning"
+                        <i-button type="text"
                                   @click="apppoolState(row.id, 'recycle')"
                                   size="small">回收应用池</i-button>
 <!--                        <i-button type="info"  size="small">下载日志</i-button>-->

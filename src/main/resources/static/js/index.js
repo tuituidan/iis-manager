@@ -6,6 +6,8 @@ new Vue({
     el: '#app',
     data() {
         return {
+            keywords: '',
+            searchDatas: [],
             datas: [],
             columns: [
                 {
@@ -14,20 +16,23 @@ new Vue({
                 },
                 {
                     title: '绑定',
-                    key: 'bindings'
+                    key: 'bindings',
+                    tooltip: true
                 },
                 {
                     title: '网站状态',
-                    key: 'siteState',
+                    slot: 'site-state',
+                    key: 'siteState'
                 },
                 {
                     title: '应用池状态',
+                    slot: 'apppool-state',
                     key: 'apppoolState',
                 },
                 {
                     title: '操作',
                     slot: 'action',
-                    width: 500,
+                    width: 380,
                     align: 'center'
                 }
             ],
@@ -40,17 +45,27 @@ new Vue({
         init() {
             this.$http.get('/api/v1/site')
                 .then(res => {
-                    this.datas = res.data;
+                    this.searchDatas = this.datas = res.data;
+                    this.searchHandler();
                 })
                 .catch(err => {
                     console.error(err);
                     this.$notice.err(err.response.data);
                 })
         },
+        searchHandler() {
+            if(!this.keywords) {
+                this.searchDatas = this.datas;
+                return;
+            }
+            this.searchDatas = this.datas.filter(item=>item.siteName.toLocaleLowerCase()
+                .includes(this.keywords.toLocaleLowerCase()))
+        },
         siteState(id, state){
-            this.$http.get(`/api/v1/site/${id}/actions/${state}`)
+            this.$http.patch(`/api/v1/site/${id}/actions/${state}`)
                 .then(() => {
                     this.$notice.suc('执行成功');
+                    this.init();
                 })
                 .catch(err => {
                     console.error(err);
@@ -58,9 +73,10 @@ new Vue({
                 })
         },
         apppoolState(id, state){
-            this.$http.get(`/api/v1/apppool/${id}/actions/${state}`)
+            this.$http.patch(`/api/v1/apppool/${id}/actions/${state}`)
                 .then(() => {
                     this.$notice.suc('执行成功');
+                    this.init();
                 })
                 .catch(err => {
                     console.error(err);
