@@ -110,7 +110,13 @@ public class AppCmdUtils {
         }
     }
 
-    private Process execCmd(String cmd) {
+    /**
+     * execCmd
+     *
+     * @param cmd cmd
+     * @return Process
+     */
+    public Process execCmd(String cmd) {
         try {
             return Runtime.getRuntime().exec(PREV_CMD + " " + cmd);
         } catch (Exception ex) {
