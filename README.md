@@ -14,6 +14,12 @@ IIS7开始提供的`C:\Windows\System32\inetsrv\appcmd.exe`这个工具可以通
 - `appcmd start site "XX网站"`：启动IIS下的XX网站
 - `appcmd stop site "XX网站"`：停止IIS下的XX网站
 
+> 运行jar的命令框请确保有执行`C:\Windows\System32\inetsrv\appcmd.exe`的权限，否则读不到数据
+
 ## license
 
 100%开源，MIT协议，可自由修改
+
+## 页面展示
+
+![home](home.png)

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -20,9 +21,10 @@ import org.dom4j.io.SAXReader;
  * @date 2022/10/25
  */
 @UtilityClass
+@Slf4j
 public class AppCmdUtils {
 
-    private static final String PREV_CMD = "C:\\Windows\\System32\\inetsrv\\appcmd ";
+    public static final String PREV_CMD = "C:\\Windows\\System32\\inetsrv\\appcmd.exe";
 
     /**
      * 查询网站
@@ -100,18 +102,20 @@ public class AppCmdUtils {
     }
 
     private static Document getDocument(String cmd) {
-        try (InputStream inputStream = Runtime.getRuntime().exec(PREV_CMD + cmd).getInputStream()) {
+        try (InputStream inputStream = execCmd(cmd).getInputStream()) {
             return SAXReader.createDefault().read(inputStream);
         } catch (Exception ex) {
-            throw new IllegalArgumentException("", ex);
+            log.error("xml数据读取失败", ex);
+            throw new IllegalStateException("xml数据读取失败", ex);
         }
     }
 
-    private void execCmd(String cmd) {
+    private Process execCmd(String cmd) {
         try {
-            Runtime.getRuntime().exec(PREV_CMD + cmd);
+            return Runtime.getRuntime().exec(PREV_CMD + " " + cmd);
         } catch (Exception ex) {
-            throw new IllegalArgumentException("", ex);
+            log.error("命令执行失败", ex);
+            throw new IllegalStateException("命令执行失败", ex);
         }
 
     }
