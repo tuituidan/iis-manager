@@ -14,6 +14,10 @@ IIS7开始提供的`C:\Windows\System32\inetsrv\appcmd.exe`这个工具可以通
 - `appcmd start site "XX网站"`：启动IIS下的XX网站
 - `appcmd stop site "XX网站"`：停止IIS下的XX网站
 
+## 部署
+
+直接从[Release](https://github.com/tuituidan/iis-manager/releases)中下载jar包，在Windows下，执行`java -jar iis-manager.jar`即可。
+
 ## license
 
 100%开源，MIT协议，可自由修改
