@@ -17,7 +17,7 @@ new Vue({
                 {
                     title: '绑定',
                     key: 'bindings',
-                    tooltip: true
+                    slot: 'bindings-slot'
                 },
                 {
                     title: '网站状态',
@@ -50,18 +50,18 @@ new Vue({
                 })
                 .catch(err => {
                     console.error(err);
-                    this.$notice.err(err.response.data);
+                    this.$notice.err('发生错误');
                 })
         },
         searchHandler() {
-            if(!this.keywords) {
+            if (!this.keywords) {
                 this.searchDatas = this.datas;
                 return;
             }
-            this.searchDatas = this.datas.filter(item=>item.siteName.toLocaleLowerCase()
+            this.searchDatas = this.datas.filter(item => item.siteName.toLocaleLowerCase()
                 .includes(this.keywords.toLocaleLowerCase()))
         },
-        siteState(id, state){
+        siteState(id, state) {
             this.$http.patch(`/api/v1/site/${id}/actions/${state}`)
                 .then(() => {
                     this.$notice.suc('执行成功');
@@ -69,10 +69,10 @@ new Vue({
                 })
                 .catch(err => {
                     console.error(err);
-                    this.$notice.err(err.response.data);
+                    this.$notice.err('发生错误');
                 })
         },
-        apppoolState(id, state){
+        apppoolState(id, state) {
             this.$http.patch(`/api/v1/apppool/${id}/actions/${state}`)
                 .then(() => {
                     this.$notice.suc('执行成功');
@@ -80,7 +80,7 @@ new Vue({
                 })
                 .catch(err => {
                     console.error(err);
-                    this.$notice.err(err.response.data);
+                    this.$notice.err('发生错误');
                 })
         }
     }

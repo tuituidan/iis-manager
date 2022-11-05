@@ -27,6 +27,16 @@
                          stripe
                          :columns="columns"
                          :data="searchDatas">
+                    <template slot-scope="{ row, index }" slot="bindings-slot">
+                        <a v-if="row.url"
+                           :title="row.bindings"
+                           :href="row.url"
+                           target="_blank"
+                           class="ellipsis-text"
+                           v-text="row.bindings"></a>
+                        <span v-else class="ellipsis-text"
+                              :title="row.bindings" v-text="row.bindings"></span>
+                    </template>
                     <template slot-scope="{ row, index }" slot="site-state">
                         <Tag color="default" v-if="row.siteState==='Stopped'">已停止</Tag>
                         <Tag color="success" v-else>已启动</Tag>

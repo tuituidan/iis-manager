@@ -22,6 +22,8 @@ public class Site {
 
     private String bindings;
 
+    private String url;
+
     private String siteState;
 
     private String apppoolName;

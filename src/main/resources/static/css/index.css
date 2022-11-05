@@ -44,3 +44,10 @@ html, body {
 .ivu-table-wrapper{
     margin-top: 10px;
 }
+
+.ellipsis-text {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: block;
+}
