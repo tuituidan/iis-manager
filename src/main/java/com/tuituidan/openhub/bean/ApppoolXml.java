@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 /**
  * AppResult.
  *
- * @author zhujunhan
+ * @author tuituidan
  * @version 1.0
  * @date 2022/10/25
  */

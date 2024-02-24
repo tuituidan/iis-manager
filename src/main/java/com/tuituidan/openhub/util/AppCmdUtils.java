@@ -16,7 +16,7 @@ import org.dom4j.io.SAXReader;
 /**
  * 执行工具appcmd命令获取结果，默认的输出需要截取字符串，容易出问题，都输出xml格式来解析.
  *
- * @author zhujunhan
+ * @author tuituidan
  * @version 1.0
  * @date 2022/10/25
  */
