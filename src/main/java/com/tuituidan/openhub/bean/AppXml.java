@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 /**
  * AppResult.
  *
- * @author zhujunhan
+ * @author tuituidan
  * @version 1.0
  * @date 2022/10/25
  */
@@ -25,4 +25,6 @@ public class AppXml {
 
     @JSONField(name = "APPPOOL.NAME")
     private String apppoolName;
+
+    private String path;
 }

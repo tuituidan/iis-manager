@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 /**
  * AppResult.
  *
- * @author zhujunhan
+ * @author tuituidan
  * @version 1.0
  * @date 2022/10/25
  */
@@ -20,6 +20,11 @@ public class VdirXml {
     @JSONField(name = "APP.NAME")
     private String appName;
 
+    private String path;
+
     private String physicalPath;
+
+    @JSONField(name = "VDIR.NAME")
+    private String vdirName;
 
 }

@@ -9,31 +9,27 @@ CustomPlugin.install = Vue => {
     });
     Vue.prototype.$notice = {
         suc(msg) {
-            Vue.prototype.$Notice.success({
+            Vue.prototype.$notify.success({
                 title: '成功',
-                duration: 2,
-                desc: msg
+                message: msg
             });
         },
         err(msg) {
-            Vue.prototype.$Notice.error({
+            Vue.prototype.$notify.error({
                 title: '错误',
-                duration: 5,
-                desc: msg
+                message: msg
             });
         },
         warn(msg) {
-            Vue.prototype.$Notice.warning({
+            Vue.prototype.$notify.warning({
                 title: '警告',
-                duration: 3,
-                desc: msg
+                message: msg
             });
         },
         info(msg) {
-            Vue.prototype.$Notice.info({
+            Vue.prototype.$notify.info({
                 title: '提示',
-                duration: 2,
-                desc: msg
+                message: msg
             });
         }
     };

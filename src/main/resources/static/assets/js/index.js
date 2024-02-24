@@ -9,33 +9,6 @@ new Vue({
             keywords: '',
             searchDatas: [],
             datas: [],
-            columns: [
-                {
-                    title: '网站',
-                    key: 'siteName'
-                },
-                {
-                    title: '绑定',
-                    key: 'bindings',
-                    slot: 'bindings-slot'
-                },
-                {
-                    title: '网站状态',
-                    slot: 'site-state',
-                    key: 'siteState'
-                },
-                {
-                    title: '应用池状态',
-                    slot: 'apppool-state',
-                    key: 'apppoolState',
-                },
-                {
-                    title: '操作',
-                    slot: 'action',
-                    width: 380,
-                    align: 'center'
-                }
-            ],
         }
     },
     mounted() {
@@ -82,6 +55,9 @@ new Vue({
                     console.error(err);
                     this.$notice.err('发生错误');
                 })
+        },
+        showFile(row) {
+            this.$refs.showFileDialog.open(row);
         }
     }
 });

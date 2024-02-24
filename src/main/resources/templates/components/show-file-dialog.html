@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="show-file-dialog">
+    <style type="text/css">
+        .el-tree {
+            background-color: #f5f5f5;
+            padding-right: 8px;
+            margin-top: 15px;
+            height: 510px;
+            overflow: auto
+        }
+    </style>
+    <template id="show-file-dialog">
+        <el-dialog
+                title="部署文件管理"
+                :visible.sync="visible"
+                append-to-body
+                :close-on-click-modal="false"
+                width="800px">
+            <div>
+                <div style="padding-bottom: 15px">当前上传路径：{{parentPath}}</div>
+                <el-row>
+                    <el-col :span="2.5">
+                        <el-tooltip content="上传zip压缩包并自动解压文件">
+                            <el-upload action="/api/v1/file/actions/upload"
+                                       :data="{zip:true, parentPath:parentPath}"
+                                       :show-file-list="false"
+                                       :on-success="uploadSuccess">
+                                <el-button size="mini" type="success" plain>上传压缩包</el-button>
+                            </el-upload>
+                        </el-tooltip>
+                    </el-col>
+                    <el-col :span="2.5" :offset="1">
+                        <el-tooltip content="直接替换上传文件">
+                            <el-upload action="/api/v1/file/actions/upload"
+                                       :data="{parentPath:parentPath}"
+                                       :show-file-list="false"
+                                       :on-success="uploadSuccess"
+                                       multiple>
+                                <el-button size="mini" type="success" plain>上传文件</el-button>
+                            </el-upload>
+                        </el-tooltip>
+                    </el-col>
+                    <el-col :span="2.5" :offset="1">
+                        <el-tooltip content="勾选文件进行删除">
+                            <el-button type="danger" size="mini" plain @click="fileDeleteHandler">文件删除</el-button>
+                        </el-tooltip>
+                    </el-col>
+                    <el-col :span="2.5" :offset="1">
+                        <el-button type="primary" size="mini" plain @click="refreshTree">重新加载</el-button>
+                    </el-col>
+                </el-row>
+                <el-tree ref="fileTree"
+                         :props="props"
+                         highlight-current
+                         show-checkbox
+                         node-key="path"
+                         :load="loadNode"
+                         @current-change="treeCurrentChange"
+                         lazy>
+                    <div slot-scope="{ node, data }" style="display: flex;width: 100%;justify-content: space-between">
+                        <el-link :icon="node.isLeaf?'el-icon-document':'el-icon-folder'"
+                                 :underline="false">{{node.label}}
+                        </el-link>
+                        <div v-if="node.isLeaf">
+                            <span v-text="data.fileSize" style="padding-right: 10px"></span>
+                            <span v-text="data.lastModifyTime" style="padding-right: 10px"></span>
+                            <el-button type="text" size="small"
+                                       @click="window.open(`/show-file?path=${encodeURIComponent(data.path)}`)">查看
+                            </el-button>
+                            <el-button type="text" size="small"
+                                       @click="window.open(`/api/v1/file/action/download?path=${encodeURIComponent(data.path)}`)">
+                                下载
+                            </el-button>
+                        </div>
+                    </div>
+                </el-tree>
+            </div>
+        </el-dialog>
+    </template>
+    <script type="text/javascript">
+        Vue.component('show-file-dialog', {
+            template: '#show-file-dialog',
+            data: function () {
+                return {
+                    visible: false,
+                    siteId: '',
+                    rootNode: null,
+                    parentPath: '',
+                    rootPath: '',
+                    props: {
+                        isLeaf: 'leaf'
+                    },
+                }
+            },
+            mounted() {
+
+            },
+            methods: {
+                treeCurrentChange(data) {
+                    if (data.leaf) {
+                        this.parentPath = data.path.substring(0, data.path.lastIndexOf('\\'));
+                    } else {
+                        this.parentPath = data.path;
+                    }
+                },
+                open(row) {
+                    this.siteId = row.id;
+                    this.rootPath = row.physicalPath;
+                    this.visible = true;
+                    this.refreshTree();
+                },
+                loadNode(node, resolve) {
+                    if (node.level === 0) {
+                        this.rootNode = node;
+                    }
+                    const path = node.data ? encodeURIComponent(node.data.path) : '';
+                    this.$http.get(`/api/v1/site/${this.siteId}/files?path=${path}`)
+                        .then(res => {
+                            return resolve(res.data);
+                        })
+                },
+                refreshTree() {
+                    this.reloadTree();
+                    this.parentPath = this.rootPath;
+                },
+                reloadTree(){
+                    if (this.rootNode) {
+                        this.rootNode.loaded = false;
+                        this.rootNode.expand();
+                    }
+                },
+                uploadSuccess() {
+                    this.$notice.suc('上传成功');
+                    this.reloadTree();
+                },
+                fileDeleteHandler() {
+                    const nodes = this.$refs.fileTree.getCheckedNodes();
+                    if (nodes.length <= 0) {
+                        this.$notice.warn('请勾选文件进行删除');
+                        return;
+                    }
+                    this.$http.post('/api/v1/file/delete', nodes.map(item => item.path))
+                        .then(() => {
+                            this.$notice.suc('删除成功');
+                            this.reloadTree();
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        });
+                }
+            }
+        })
+    </script>
+</div>
+</html>

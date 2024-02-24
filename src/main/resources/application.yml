@@ -7,3 +7,5 @@ logging:
     org:
       apache: error
       springframework: error
+server:
+  port: 1111
