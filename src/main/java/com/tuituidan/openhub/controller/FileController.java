@@ -1,16 +1,19 @@
 package com.tuituidan.openhub.controller;
 
 import com.tuituidan.openhub.util.ResponseUtils;
+import com.tuituidan.openhub.util.StringExtUtils;
 import com.tuituidan.openhub.util.ZipUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.BooleanUtils;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -67,11 +70,22 @@ public class FileController {
      * downloadFile
      *
      * @param path path
-     * @throws FileNotFoundException FileNotFoundException
+     * @throws FileNotFoundException ex
      */
     @GetMapping("/file/action/download")
-    public void downloadFile(String path) throws FileNotFoundException {
-        ResponseUtils.download(FilenameUtils.getName(path), new FileInputStream(path));
+    public void downloadFile(String path) throws IOException {
+        File file = new File(path);
+        if (file.isFile()) {
+            Assert.isTrue(file.length() > 0, "这是一个空文件");
+            ResponseUtils.download(file.getName(), new FileInputStream(path));
+            return;
+        }
+        File[] files = file.listFiles();
+        Assert.isTrue(files != null && files.length > 0, "这是一个空文件夹");
+        String zipPath = new File(path).getParentFile().getPath() + File.separator + StringExtUtils.getUuid() + ".zip";
+        ZipUtils.zip(zipPath, Arrays.stream(files).map(File::getPath).collect(Collectors.toList()));
+        ResponseUtils.download(FilenameUtils.getName(path) + ".zip", new FileInputStream(zipPath));
+        FileUtils.forceDelete(new File(zipPath));
     }
 
     /**
@@ -81,7 +95,7 @@ public class FileController {
      * @throws IOException IOException
      */
     @GetMapping("/file/action/show")
-    public String showFileContent(String path, HttpServletResponse response) throws IOException {
+    public String showFileContent(String path) throws IOException {
         return FileUtils.readFileToString(new File(path), StandardCharsets.UTF_8);
     }
 

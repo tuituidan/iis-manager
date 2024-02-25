@@ -3,6 +3,7 @@ package com.tuituidan.openhub.util;
 import java.io.File;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.util.List;
 import lombok.experimental.UtilityClass;
 import net.lingala.zip4j.ZipFile;
 import org.apache.commons.io.FileUtils;
@@ -19,6 +20,27 @@ import org.springframework.util.Assert;
 public class ZipUtils {
 
     private static final Charset CHARSET_GBK = Charset.forName("GBK");
+
+    /**
+     * zip
+     *
+     * @param zipPath zipPath
+     * @param sourcePaths sourcePaths
+     */
+    public static void zip(String zipPath, List<String> sourcePaths) {
+        try (ZipFile zipFile = new ZipFile(zipPath)) {
+            for (String sourcePath : sourcePaths) {
+                File file = new File(sourcePath);
+                if (file.isDirectory()) {
+                    zipFile.addFolder(file);
+                } else {
+                    zipFile.addFile(file);
+                }
+            }
+        } catch (Exception ex) {
+            throw new IllegalArgumentException("压缩失败", ex);
+        }
+    }
 
     /**
      * 解压文件

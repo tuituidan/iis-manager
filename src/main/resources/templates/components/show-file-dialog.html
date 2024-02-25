@@ -62,10 +62,10 @@
                         <el-link :icon="node.isLeaf?'el-icon-document':'el-icon-folder'"
                                  :underline="false">{{node.label}}
                         </el-link>
-                        <div v-if="node.isLeaf">
-                            <span v-text="data.fileSize" style="padding-right: 10px"></span>
-                            <span v-text="data.lastModifyTime" style="padding-right: 10px"></span>
-                            <el-button type="text" size="small"
+                        <div>
+                            <span  v-if="node.isLeaf" v-text="data.fileSize" style="padding-right: 10px"></span>
+                            <span  v-if="node.isLeaf" v-text="data.lastModifyTime" style="padding-right: 10px"></span>
+                            <el-button  v-if="node.isLeaf" type="text" size="small"
                                        @click="window.open(`/show-file?path=${encodeURIComponent(data.path)}`)">查看
                             </el-button>
                             <el-button type="text" size="small"
