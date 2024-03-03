@@ -26,13 +26,13 @@ IIS7开始提供的`C:\Windows\System32\inetsrv\appcmd.exe`这个工具可以通
 
 ## 功能简介
 
-- 无数据库，简单的登录控制，在`springboot`的`yml`配置中配置账号密码。
+- 无数据库，简单的登录控制，在`springboot`的`yml`配置中配置账号密码（默认账号密码：iis-manager  / iis-manager@2024）。
 - 在线启动、停止、重启网站。
 - 在线启动、停止、回收应用程序池。
 - 在线显示网站部署目录文件，可上传替换文件，在线查看文本文件，下载文件，对于大量文件可上传压缩包自动解压。
 
 ## 演示图
 
-![首页](https://github.com/tuituidan/iis-manager/assets/20398244/44e9eb34-e094-4ab6-ae98-321ff597cc91)
+![首页](https://github.com/tuituidan/iis-manager/assets/20398244/a8ea2704-c611-4ff5-9f0e-b8b446e657df)
 
 ![文件管理](https://github.com/tuituidan/iis-manager/assets/20398244/3ba333fe-9d33-4db0-b58e-aa82f91fbfd8)

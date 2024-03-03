@@ -22,8 +22,8 @@ new Vue({
                     this.searchHandler();
                 })
                 .catch(err => {
-                    console.error(err);
-                    this.$notice.err('发生错误');
+                    console.error(err.response);
+                    this.$notice.err(err.response.data.message);
                 })
         },
         searchHandler() {
@@ -41,8 +41,8 @@ new Vue({
                     this.init();
                 })
                 .catch(err => {
-                    console.error(err);
-                    this.$notice.err('发生错误');
+                    console.error(err.response);
+                    this.$notice.err(err.response.data.message);
                 })
         },
         apppoolState(id, state) {
@@ -52,8 +52,8 @@ new Vue({
                     this.init();
                 })
                 .catch(err => {
-                    console.error(err);
-                    this.$notice.err('发生错误');
+                    console.error(err.response);
+                    this.$notice.err(err.response.data.message);
                 })
         },
         showFile(row) {
