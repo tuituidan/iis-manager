@@ -28,13 +28,21 @@ html, body {
 .el-header {
     padding: 0;
     background-color: #515a6e;
-    height: 64px !important;
-    line-height: 64px;
 }
 .el-header div {
     margin: 0 200px;
     color: white;
+    line-height: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+}
+.el-header div img {
+    width: 50px
+}
+.el-header div span {
     font-size: 26px;
+    margin-left: 8px;
 }
 .el-main {
     padding: 20px 200px;

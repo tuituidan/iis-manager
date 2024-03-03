@@ -9,3 +9,12 @@ logging:
       springframework: error
 server:
   port: 1111
+spring:
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 1GB
+  security:
+    user:
+      name: iis-manager
+      password: iis-manager@2024
