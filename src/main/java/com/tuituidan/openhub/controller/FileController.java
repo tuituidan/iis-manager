@@ -1,5 +1,6 @@
 package com.tuituidan.openhub.controller;
 
+import com.tuituidan.openhub.bean.file.FileData;
 import com.tuituidan.openhub.util.ResponseUtils;
 import com.tuituidan.openhub.util.StringExtUtils;
 import com.tuituidan.openhub.util.ZipUtils;
@@ -8,11 +9,19 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -97,6 +106,31 @@ public class FileController {
     @GetMapping("/file/action/show")
     public String showFileContent(String path) throws IOException {
         return FileUtils.readFileToString(new File(path), StandardCharsets.UTF_8);
+    }
+
+    /**
+     * loadFileData
+     *
+     * @param path path
+     * @return List
+     */
+    @GetMapping("/site/files")
+    public List<FileData> loadFileData(String rootPath, String path) {
+        File[] files = new File(StringUtils.isNotBlank(path) ? path : rootPath).listFiles();
+        if (files == null) {
+            return Collections.emptyList();
+        }
+        return Arrays.stream(files).map(file -> new FileData()
+                        .setLabel(file.getName())
+                        .setPath(file.getPath())
+                        .setFileSize(FileUtils.byteCountToDisplaySize(file.length()))
+                        .setLastModifyTime(LocalDateTime
+                                .ofInstant(Instant.ofEpochMilli(file.lastModified()), ZoneId.systemDefault())
+                                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                        .setLeaf(file.isFile()))
+                .sorted(Comparator.comparing(FileData::getLeaf)
+                        .thenComparing(FileData::getLabel, String.CASE_INSENSITIVE_ORDER))
+                .collect(Collectors.toList());
     }
 
 }

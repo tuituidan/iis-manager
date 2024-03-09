@@ -145,7 +145,7 @@
                         this.rootNode = node;
                     }
                     const path = node.data ? encodeURIComponent(node.data.path) : '';
-                    this.$http.get(`/api/v1/site/${this.siteId}/files?path=${path}`)
+                    this.$http.get(`/api/v1/site/files?rootPath=${this.rootPath}&path=${path}`)
                         .then(res => {
                             return resolve(res.data);
                         })

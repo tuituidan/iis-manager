@@ -1,8 +1,7 @@
 package com.tuituidan.openhub.controller;
 
 import com.tuituidan.openhub.bean.Site;
-import com.tuituidan.openhub.bean.file.FileData;
-import com.tuituidan.openhub.service.ManagerService;
+import com.tuituidan.openhub.service.IManagerService;
 import java.util.List;
 import javax.annotation.Resource;
 import org.springframework.http.HttpStatus;
@@ -25,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ManagerController {
 
     @Resource
-    private ManagerService managerService;
+    private IManagerService managerService;
 
     /**
      * 查询网站列表
@@ -59,18 +58,6 @@ public class ManagerController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void apppoolState(@PathVariable String id, @PathVariable String state) {
         managerService.apppoolState(id, state);
-    }
-
-    /**
-     * loadFileData
-     *
-     * @param siteId siteId
-     * @param path path
-     * @return List
-     */
-    @GetMapping("/site/{siteId}/files")
-    public List<FileData> loadFileData(@PathVariable String siteId, String path) {
-        return managerService.loadFileData(siteId, path);
     }
 
 }
