@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+    <title>登录</title>
+    <link type="text/css" rel="stylesheet" th:href="@{/assets/lib/elementui/index.css}">
+    <link type="text/css" rel="stylesheet" th:href="@{/assets/css/index.css}">
+    <style type="text/css">
+        #app {
+            padding-top: 100px;
+        }
+
+        .el-card {
+            width: 400px;
+            margin: 0 auto;
+        }
+
+        .login-button {
+            width: 100%;
+        }
+
+        .el-input .el-input-group__prepend {
+            padding: 0 10px;
+        }
+    </style>
+</head>
+<body>
+<div v-cloak id="app">
+    <el-card shadow>
+        <p slot="header">
+            <i class="el-icon-coffee-cup"></i>
+            欢迎登录
+        </p>
+        <el-form ref="userForm"
+                 :model="userForm"
+                 action="/login"
+                 method="post"
+                 @keyup.enter.native="loginHandler()"
+                 @submit.native.prevent
+                 :rules="ruleCustom">
+            <el-form-item prop="username">
+                <el-input name="username"
+                          ref="username"
+                          v-model.trim="userForm.username"
+                          placeholder="请输入" size="large">
+                    <i slot="prepend" class="el-icon-user"></i>
+                </el-input>
+            </el-form-item>
+            <el-form-item prop="password">
+                <el-input name="password"
+                          type="password"
+                          v-model.trim="userForm.password"
+                          placeholder="请输入密码" size="large">
+                    <i slot="prepend" class="el-icon-lock"></i>
+                </el-input>
+            </el-form-item>
+            <el-form-item class="remember-me-panel">
+                <el-checkbox v-model="rememberMe">记住密码</el-checkbox>
+                <el-checkbox v-model="autoLogin" :disabled="!rememberMe">自动登录</el-checkbox>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="loginHandler()" class="login-button"
+                           :loading="login_loading">登录
+                </el-button>
+            </el-form-item>
+            <el-form-item th:if="${param.error}">
+                <el-alert type="error" :closable="false"
+                          center show-icon
+                          th:title="${session['SPRING_SECURITY_LAST_EXCEPTION'].message}"></el-alert>
+            </el-form-item>
+        </el-form>
+    </el-card>
+</div>
+<script type="text/javascript" th:src="@{/assets/lib/vue.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/lib/elementui/index.js}"></script>
+<script type="text/javascript" th:src="@{/assets/lib/axios.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/vue-utils.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+    const param = /*[[${param}]]*/ {};
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                login_loading: false,
+                rememberMe: false,
+                autoLogin: false,
+                userForm: {
+                    username: '',
+                    password: ''
+                },
+                ruleCustom: {
+                    username: [
+                        {required: true, message: '用户名不能为空', trigger: 'blur'}
+                    ],
+                    password: [
+                        {required: true, message: '密码不能为空', trigger: 'blur'}
+                    ]
+                }
+            }
+        },
+        watch: {
+            rememberMe(val) {
+                if (!val) {
+                    this.autoLogin = false
+                }
+            }
+        },
+        mounted() {
+            if (localStorage.rememberMe === 'true') {
+                this.userForm.username = localStorage.username;
+                this.userForm.password = localStorage.password;
+                this.rememberMe = true;
+                if (localStorage.autoLogin === 'true') {
+                    this.autoLogin = true;
+                    if (!param.error) {
+                        this.$nextTick(() => {
+                            this.loginHandler();
+                        })
+                    }
+                }
+            }
+        },
+        methods: {
+            loginHandler() {
+                this.login_loading = true;
+                this.$refs.userForm.validate(valid => {
+                    if (!valid) {
+                        this.login_loading = false;
+                        return;
+                    }
+                    if (this.rememberMe) {
+                        localStorage.username = this.userForm.username;
+                        localStorage.password = this.userForm.password;
+                        localStorage.rememberMe = this.rememberMe;
+                        if (this.autoLogin) {
+                            localStorage.autoLogin = this.autoLogin
+                        } else {
+                            delete localStorage.autoLogin;
+                        }
+                    } else {
+                        delete localStorage.username;
+                        delete localStorage.password;
+                        delete localStorage.rememberMe;
+                    }
+                    this.$refs.userForm.$el.submit();
+                });
+
+            }
+        }
+    });
+</script>
+</body>
+</html>

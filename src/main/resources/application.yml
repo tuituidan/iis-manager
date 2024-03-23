@@ -15,6 +15,7 @@ spring:
       max-file-size: 100MB
       max-request-size: 1GB
   security:
+    enabled: false
     user:
-      name: iis-manager
-      password: iis-manager@2024
+      name: admin
+      password: admin123
