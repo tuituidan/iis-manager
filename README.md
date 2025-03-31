@@ -1,4 +1,4 @@
-> 本服务停止更新，有新的优化扩展见【https://github.com/tuituidan/windows-manager】【https://gitee.com/tuituidan/windows-manager】，windows-manager包含了本服务的所有功能
+> 本服务停止更新，有新的优化扩展见【windows-manager】 [github](https://github.com/tuituidan/windows-manager)、[gitee](https://gitee.com/tuituidan/windows-manager)，其包含了本服务的所有功能
 
 
 
