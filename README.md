@@ -1,3 +1,7 @@
+> 本服务停止更新，有新的优化扩展见【https://github.com/tuituidan/windows-manager】【https://gitee.com/tuituidan/windows-manager】，windows-manager包含了本服务的所有功能
+
+
+
 # IIS管理
 
 ## 背景
